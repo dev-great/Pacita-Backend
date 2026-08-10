@@ -79,12 +79,30 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+# MySQL in production (PythonAnywhere), SQLite locally.
+if env("DB_HOST"):
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": env("DB_NAME"),
+            "USER": env("DB_USER"),
+            "PASSWORD": env("DB_PASSWORD"),
+            "HOST": env("DB_HOST"),
+            "PORT": env("DB_PORT", "3306"),
+            "OPTIONS": {"charset": "utf8mb4"},
+            # PythonAnywhere drops idle MySQL connections after ~5 minutes,
+            # so keep them short-lived and health-checked.
+            "CONN_MAX_AGE": 60,
+            "CONN_HEALTH_CHECKS": True,
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 # For Postgres in production, set DATABASE_URL-style env vars and swap here,
 # or simply replace the block above:
 #   "ENGINE": "django.db.backends.postgresql", "NAME": env("PG_NAME"), ...
