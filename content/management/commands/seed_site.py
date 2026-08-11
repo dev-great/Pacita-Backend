@@ -57,6 +57,10 @@ class Command(BaseCommand):
             upsert(SiteSetting, {"key": key}, {"value": value, "note": note})
         for i, (name, url) in enumerate(D.SOCIAL_LINKS):
             upsert(SocialLink, {"name": name}, {"url": url, "order": i})
+        retired_socials = SocialLink.objects.filter(name__in=getattr(D, "RETIRED_SOCIAL_NAMES", []))
+        if retired_socials.exists():
+            self.stdout.write(self.style.WARNING(f"Removing retired social(s): {', '.join(retired_socials.values_list('name', flat=True))}"))
+            retired_socials.delete()
 
         # ── Coaching steps ──
         for number, title, anchor, anchor_ref, copy in D.COACHING_STEPS:

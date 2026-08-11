@@ -274,9 +274,13 @@ SITE_SETTINGS = [
 SOCIAL_LINKS = [
     ("Instagram", "https://www.instagram.com/iampacitatiana/"),
     ("Facebook", "https://www.facebook.com/"),   # TODO real handle
-    ("TikTok", "https://www.tiktok.com/"),       # TODO real handle
+    ("LinkedIn", "https://www.linkedin.com/in/"),  # TODO real handle
     ("Email", "mailto:hello@pacitatiana.com"),
 ]
+
+# Social links no longer used — seed_site removes them so a renamed platform
+# doesn't leave a dead icon in the header and footer.
+RETIRED_SOCIAL_NAMES = ["TikTok"]
 
 # ═══════════════════════ COACHING — THE 7 STEPS (APPROVED) ═══════════════════════
 COACHING_STEPS = [
